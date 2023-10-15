@@ -75,7 +75,7 @@ const Logs = React.memo((props: Props) => {
             {publicKey ? (
               // connected
               <>
-                Click a button and watch magic happen...{' '}
+                Click the button to be signed into the extension {' '}
                 <span role="img" aria-label="Sparkles Emoji">
                   ✨
                 </span>
@@ -83,10 +83,7 @@ const Logs = React.memo((props: Props) => {
             ) : (
               // not connected
               <>
-                Welcome to the Phantom sandbox. Connect to your Phantom wallet and play around...{' '}
-                <span role="img" aria-label="Ghost Emoji">
-                  👻
-                </span>
+                <div id="initalMessage">No Extension Detected</div>
               </>
             )}
           </PlaceholderMessage>

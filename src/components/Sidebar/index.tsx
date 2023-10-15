@@ -206,7 +206,12 @@ const Sidebar = React.memo((props: Props) => {
         <Link>
           <img src="/images/logo.png" alt="Phantom" width="200" />
         </Link>
-        <WalletMultiButton />  
+        <div id="hasExtensionConnect" style={{ display: 'none' }}>
+          <WalletMultiButton />
+        </div>
+        <div id="noExtensionConnect" style={{ textAlign: "center" }}>
+          Get the Horizon Browser Extension to Connect
+        </div>
         {publicKey ? (
           // connected
           <>
@@ -228,8 +233,7 @@ const Sidebar = React.memo((props: Props) => {
       </Body>
       {/* 😊 💕  */}
       <Tag>
-        Credits to the {' '}
-        <a href="https://phantom.app">Phantom</a> team
+        Credits to the <a href="https://phantom.app">Phantom</a> team
       </Tag>
     </Main>
   );
