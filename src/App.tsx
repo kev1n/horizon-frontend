@@ -177,7 +177,7 @@ const StatelessApp = () => {
   const connectedMethods = useMemo(() => {
     return [
       {
-        name: 'Sign In To Wallet',
+        name: 'Sign In To Extension',
         onClick: handleSignIn,
       },
       {
