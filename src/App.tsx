@@ -215,9 +215,9 @@ const StatelessApp = () => {
 // Main Component
 // =============================================================================
 const App = () => {
-  const network = WalletAdapterNetwork.Mainnet;
+  const network = WalletAdapterNetwork.Devnet;
 
-  const endpoint = `https://api.mainnet-beta.solana.com`;
+  const endpoint = `https://api.devnet.solana.com`;
 
   const wallets = useMemo(
     () => [], // confirmed also with `() => []` for wallet-standard only
