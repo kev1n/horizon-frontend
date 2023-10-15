@@ -22,10 +22,10 @@ const Main = styled.main`
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   padding: 20px;
   align-items: center;
-  background-color: ${REACT_GRAY};
+  background-color: white;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   max-height: 100vh;
@@ -48,7 +48,7 @@ const Body = styled.div`
 `;
 
 const Link = styled.a.attrs({
-  href: 'https://phantom.app/',
+  href: 'https://chrome.google.com/webstore/search/horizon?hl=en',
   target: '_blank',
   rel: 'noopener noreferrer',
 })`
@@ -62,6 +62,12 @@ const Link = styled.a.attrs({
     outline: 2px solid ${hexToRGB(GRAY, 0.5)};
     border-radius: 6px;
   }
+  background: linear-gradient(145deg, #5715ff, #12006e) !important;
+  padding: 15px 30px;
+  border-radius: 30px;
+  margin-top: 2em;
+  font-size: 0.9em;
+  font-weight: 600;
 `;
 
 const Pre = styled.pre`
@@ -104,6 +110,23 @@ const Divider = styled.div`
   margin: 20px 0;
 `;
 
+const Title = styled.p`
+  font-size: 1.5em;
+  color: black;
+  font-weight: 700;
+  text-align: center;
+`;
+const SubTitle = styled.p`
+  font-size: 0.9em;
+  font-weight: 200;
+  opacity: 0.6;
+  max-width: 90%;
+  margin: auto;
+  margin-top: 5px;
+  color: black;
+  text-align:center;
+`;
+
 const Tag = styled.p`
   text-align: center;
   color: ${GRAY};
@@ -130,6 +153,10 @@ const Tag = styled.p`
     color: ${WHITE};
     background-color: ${hexToRGB(PURPLE, 0.5)};
   }
+`;
+
+const BodyContent = styled.div`
+  text-align:center;
 `;
 
 const NavigationLink = styled(NavLink)`
@@ -203,14 +230,16 @@ const Sidebar = React.memo((props: Props) => {
   return (
     <Main>
       <Body>
-        <Link>
-          <img src="/images/logo.png" alt="Phantom" width="200" />
-        </Link>
+        <BodyContent>
+          <img src="/images/logo.png" alt="Horizon" width="120" />
+          <Title> Horizon </Title>
+          <SubTitle> Bridging the gap Between Web2 and Web3 Worlds</SubTitle>
+        </BodyContent>
         <div id="hasExtensionConnect" style={{ display: 'none' }}>
-          <WalletMultiButton />
+          <WalletMultiButton  style={{ marginTop: "2em",background: "linear-gradient(145deg, #5715ff, #12006e)", borderRadius: "30px", fontSize: "0.9em", padding: "15px 30px"}}/>
         </div>
-        <div id="noExtensionConnect" style={{ textAlign: "center" }}>
-          Get the Horizon Browser Extension to Connect
+        <div id="noExtensionConnect" style={{ textAlign: "center"}}>
+          <Link>Get Horizon to connect</Link>
         </div>
         {publicKey ? (
           // connected
@@ -232,9 +261,9 @@ const Sidebar = React.memo((props: Props) => {
         )}
       </Body>
       {/* 😊 💕  */}
-      <Tag>
+      {/* <Tag>
         Credits to the <a href="https://phantom.app">Phantom</a> team
-      </Tag>
+      </Tag> */}
     </Main>
   );
 });

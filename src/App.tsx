@@ -206,7 +206,7 @@ const StatelessApp = () => {
   return (
     <StyledApp>
       <Sidebar publicKey={publicKey} connectedMethods={connectedMethods} connect={handleConnect} />
-      <Logs publicKey={publicKey} logs={logs} clearLogs={clearLogs} />
+      {/* <Logs publicKey={publicKey} logs={logs} clearLogs={clearLogs} /> */}
     </StyledApp>
   );
 };
