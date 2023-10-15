@@ -204,7 +204,7 @@ const Sidebar = React.memo((props: Props) => {
     <Main>
       <Body>
         <Link>
-          <img src="/images/phantom-icon-purple.png" alt="Phantom" width="75" />
+          <img src="/images/logo.png" alt="Phantom" width="200" />
         </Link>
         <WalletMultiButton />  
         {publicKey ? (

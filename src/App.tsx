@@ -107,7 +107,7 @@ const StatelessApp = () => {
       createLog({
         status: 'success',
         method: 'signIn',
-        message: `Message signed: ${JSON.stringify(signedMessage)} by ${account.address} with signature ${JSON.stringify(signature)}`,
+        message: `Signed in by ${account.address}`,
       });
     } catch (error) {
       createLog({
