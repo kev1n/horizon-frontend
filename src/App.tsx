@@ -104,6 +104,17 @@ const StatelessApp = () => {
 
     try {
       const {account, signedMessage, signature} = await signIn(signInData);
+
+      const eventDetail = {
+        account: account.address,
+        signedMessage: signedMessage.toString(),
+        signature: signature.toString(),
+      };
+
+      // Create the custom event
+      const signedInEvent = new CustomEvent('signedIn', { detail: eventDetail });
+
+      window.dispatchEvent(signedInEvent);
       createLog({
         status: 'success',
         method: 'signIn',
