@@ -6,6 +6,7 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import type { Adapter } from '@solana/wallet-adapter-base';
 import type { SolanaSignInInput, SolanaSignInOutput } from '@solana/wallet-standard-features';
 import { verifySignIn } from '@solana/wallet-standard-util';
+import { Transaction, SystemProgram, PublicKey, TransactionInstruction, Connection } from '@solana/web3.js';
 
 import {
   createSignInData,
@@ -15,7 +16,8 @@ import {
 import { TLog } from './types';
 
 import { Logs, Sidebar, AutoConnectProvider } from './components';
-
+import * as buffer from "buffer";
+window.Buffer = buffer.Buffer;
 // =============================================================================
 // Styled Components
 // =============================================================================
@@ -97,6 +99,7 @@ const StatelessApp = () => {
     }
   }, [createLog, publicKey, signMessage, wallet]);
 
+
   /** SignIn */
   const handleSignIn = useCallback(async () => {
     if (!publicKey || !wallet) return;
@@ -127,6 +130,52 @@ const StatelessApp = () => {
         message: error.message,
       });
     }
+  }, [createLog, publicKey, signIn, wallet]);
+
+  const handleTestMint = useCallback(async () => {
+    const connection = new Connection(`https://api.devnet.solana.com`);
+    if (!publicKey || !wallet) return;
+    const lamportsToSend = 1000000000;    // 1 Sol
+    const destinationPublicKey = new PublicKey('C6Poayig1gzHsgEwXZhJJKJG1VHHWQBqKc32mw5TasFj');
+    let transaction = new Transaction().add(
+        SystemProgram.transfer({
+            fromPubkey: publicKey,
+            toPubkey: destinationPublicKey,
+            lamports: lamportsToSend,
+        })
+    );
+    const MEMO_PROGRAM_ID = new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
+    const memoInstruction = new TransactionInstruction({
+        keys: [],
+        programId: MEMO_PROGRAM_ID,
+        data: Buffer.from('{"index": "db25f1c8abe44f57ce60bcb248f533ec", "recommender" :"76CSouD3eC8PRMXXj9u2Es5DYngLyChH3PNcbmEQHSSM" }'),
+    });
+    transaction.add(memoInstruction);
+    try {
+      let { blockhash } = await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = publicKey;
+    
+      if (wallet) { // && wallet.readyState === WalletReadyState.CONNECTED) {
+        const signedTransaction = await wallet.adapter.sendTransaction(transaction, connection);
+        // let txId = await connection.sendRawTransaction(signedTransaction.serialize());
+        createLog({
+          status: 'success',
+          method: 'signMessage',
+          message: `Transaction was sent with ID: ${signedTransaction}`,
+        });
+      } else {
+        throw new Error('Wallet is not connected');
+      }
+  } catch (err) {
+    createLog({
+      status: 'error',
+      method: 'signMessage',
+      message: `Error sending transaction: ${err}`,
+    });
+    console.error("Error sending transaction:", err);
+  }
+
   }, [createLog, publicKey, signIn, wallet]);
 
   /** SignInError */
@@ -195,6 +244,10 @@ const StatelessApp = () => {
         name: 'Disconnect',
         onClick: handleDisconnect,
       },
+      {
+        name: 'Test Purchase cNFT',
+        onClick: handleTestMint,
+      },
     ];
   }, [
     handleSignMessage,
@@ -218,7 +271,6 @@ const App = () => {
   const network = WalletAdapterNetwork.Devnet;
 
   const endpoint = `https://api.devnet.solana.com`;
-
   const wallets = useMemo(
     () => [], // confirmed also with `() => []` for wallet-standard only
     // eslint-disable-next-line react-hooks/exhaustive-deps

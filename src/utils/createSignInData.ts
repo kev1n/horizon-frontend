@@ -13,7 +13,7 @@ export const createSignInData = async (): Promise<SolanaSignInInput> => {
     statement: "Clicking Sign or Approve only means you have proved this wallet is owned by you. This request will not trigger any blockchain transaction or cost any gas fee.",
     version: "1",
     nonce: "oBbLoEldZs",
-    chainId: "mainnet",
+    chainId: "devnet",
     issuedAt: currentDateTime,
     resources: ["https://example.com", "https://phantom.app/"],
   };
@@ -32,7 +32,7 @@ export const createSignInErrorData = async (): Promise<SolanaSignInInput> => {
     uri: "https://www.phishing.com",
     version: "1",
     nonce: "oBbLoEldZs",
-    chainId: "solana:mainnet",
+    chainId: "solana:devnet",
     issuedAt: currentDateTime,
     resources: ["https://example.com", "https://phantom.app/"]
   };
