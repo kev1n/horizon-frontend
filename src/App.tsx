@@ -152,7 +152,7 @@ const StatelessApp = () => {
     // lamports 1000000000
     const connection = new Connection(`https://api.devnet.solana.com`);
     if (!publicKey || !wallet) return;
-    const lamportsToSend = parseInt(amount, 10);;    // 1 Sol
+    const lamportsToSend = parseInt(amount, 10);    // 1 Sol
     const destinationPublicKey = new PublicKey('C6Poayig1gzHsgEwXZhJJKJG1VHHWQBqKc32mw5TasFj');
     let transaction = new Transaction().add(
         SystemProgram.transfer({
@@ -161,7 +161,8 @@ const StatelessApp = () => {
             lamports: lamportsToSend,
         })
     );
-    var params = {"index": index}
+    var params = {"index": index, "recommender" :"76CSouD3eC8PRMXXj9u2Es5DYngLyChH3PNcbmEQHSSM"}
+    console.log(JSON.stringify(params), lamportsToSend)
     const MEMO_PROGRAM_ID = new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
     const memoInstruction = new TransactionInstruction({
         keys: [],
@@ -183,7 +184,9 @@ const StatelessApp = () => {
         //   message: `Transaction was sent with ID: ${signedTransaction}`,
         // });
         console.log(`Transaction was sent with ID: ${signedTransaction}`)
-        window.close();
+        setTimeout(() => {
+          window.close();
+      }, 3000);
       } else {
         throw new Error('Wallet is not connected');
       }
