@@ -8,6 +8,7 @@ import type { SolanaSignInInput, SolanaSignInOutput } from '@solana/wallet-stand
 import { verifySignIn } from '@solana/wallet-standard-util';
 import { Transaction, SystemProgram, PublicKey, TransactionInstruction, Connection } from '@solana/web3.js';
 import { useLocation } from 'react-router-dom';
+import { useRouteError } from 'react-router-dom';
 
 import {
   createSignInData,
@@ -44,13 +45,18 @@ const message = 'To avoid digital dognappers, sign below to authenticate with Cr
 
 export type ConnectedMethods =
   | {
-    name: string;
-    onClick: () => Promise<string>;
-  }
+      name: string;
+      onClick: () => Promise<string>;
+    }
   | {
-    name: string;
-    onClick: () => Promise<void>;
-  };
+      name: string;
+      onClick: () => Promise<void>;
+    }
+  | {
+      name: string;
+      onClick: () => Promise<void>;
+    };
+
 
 
 const StatelessApp = () => {
@@ -60,11 +66,11 @@ const StatelessApp = () => {
   const queryParams = new URLSearchParams(location.search);
   const index = queryParams.get('index');
   const amount = queryParams.get('amount');
-
+  console.log(index, amount)
   useEffect(() => {
     console.log("mint", index, amount)
     if (index && amount) {
-      handleTestMint(index, amount);
+      handleTestMint();
     }
   }, [index, amount]);
 
@@ -144,7 +150,7 @@ const StatelessApp = () => {
     }
   }, [createLog, publicKey, signIn, wallet]);
 
-  const handleTestMint = useCallback(async (index: string, amount: string) => {
+  const handleTestMint = useCallback(async () => {
     // index "db25f1c8abe44f57ce60bcb248f533ec"
     // recommender "76CSouD3eC8PRMXXj9u2Es5DYngLyChH3PNcbmEQHSSM"
     // lamports 1000000000
@@ -262,10 +268,10 @@ const StatelessApp = () => {
         name: 'Disconnect',
         onClick: handleDisconnect,
       },
-      // {
-      //   name: 'Test Purchase cNFT',
-      //   onClick: handleTestMint,
-      // },
+      {
+         name: 'Test Purchase cNFT',
+         onClick: handleTestMint,
+      },
     ];
   }, [
     handleSignMessage,
