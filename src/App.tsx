@@ -269,7 +269,7 @@ const StatelessApp = () => {
         onClick: handleDisconnect,
       },
       {
-         name: 'Test Purchase cNFT',
+         name: 'Purchase cNFT',
          onClick: handleTestMint,
       },
     ];
