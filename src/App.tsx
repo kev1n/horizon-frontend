@@ -7,6 +7,7 @@ import type { Adapter } from '@solana/wallet-adapter-base';
 import type { SolanaSignInInput, SolanaSignInOutput } from '@solana/wallet-standard-features';
 import { verifySignIn } from '@solana/wallet-standard-util';
 import { Transaction, SystemProgram, PublicKey, TransactionInstruction, Connection } from '@solana/web3.js';
+import { useLocation } from 'react-router-dom';
 
 import {
   createSignInData,
@@ -55,6 +56,17 @@ export type ConnectedMethods =
 const StatelessApp = () => {
   const { wallet, publicKey, connect, disconnect, signMessage, signIn } = useWallet();
   const [logs, setLogs] = useState<TLog[]>([]);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const index = queryParams.get('index');
+  const amount = queryParams.get('amount');
+
+  useEffect(() => {
+    console.log("mint", index, amount)
+    if (index && amount) {
+      handleTestMint(index, amount);
+    }
+  }, [index, amount]);
 
   const createLog = useCallback(
     (log: TLog) => {
@@ -132,10 +144,13 @@ const StatelessApp = () => {
     }
   }, [createLog, publicKey, signIn, wallet]);
 
-  const handleTestMint = useCallback(async () => {
+  const handleTestMint = useCallback(async (index: string, amount: string) => {
+    // index "db25f1c8abe44f57ce60bcb248f533ec"
+    // recommender "76CSouD3eC8PRMXXj9u2Es5DYngLyChH3PNcbmEQHSSM"
+    // lamports 1000000000
     const connection = new Connection(`https://api.devnet.solana.com`);
     if (!publicKey || !wallet) return;
-    const lamportsToSend = 1000000000;    // 1 Sol
+    const lamportsToSend = parseInt(amount, 10);;    // 1 Sol
     const destinationPublicKey = new PublicKey('C6Poayig1gzHsgEwXZhJJKJG1VHHWQBqKc32mw5TasFj');
     let transaction = new Transaction().add(
         SystemProgram.transfer({
@@ -144,11 +159,12 @@ const StatelessApp = () => {
             lamports: lamportsToSend,
         })
     );
+    var params = {"index": index}
     const MEMO_PROGRAM_ID = new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
     const memoInstruction = new TransactionInstruction({
         keys: [],
         programId: MEMO_PROGRAM_ID,
-        data: Buffer.from('{"index": "db25f1c8abe44f57ce60bcb248f533ec", "recommender" :"76CSouD3eC8PRMXXj9u2Es5DYngLyChH3PNcbmEQHSSM" }'),
+        data: Buffer.from(JSON.stringify(params)), // '{"index": "db25f1c8abe44f57ce60bcb248f533ec", "recommender" :"76CSouD3eC8PRMXXj9u2Es5DYngLyChH3PNcbmEQHSSM" }'
     });
     transaction.add(memoInstruction);
     try {
@@ -159,20 +175,22 @@ const StatelessApp = () => {
       if (wallet) { // && wallet.readyState === WalletReadyState.CONNECTED) {
         const signedTransaction = await wallet.adapter.sendTransaction(transaction, connection);
         // let txId = await connection.sendRawTransaction(signedTransaction.serialize());
-        createLog({
-          status: 'success',
-          method: 'signMessage',
-          message: `Transaction was sent with ID: ${signedTransaction}`,
-        });
+        // createLog({
+        //   status: 'success',
+        //   method: 'signMessage',
+        //   message: `Transaction was sent with ID: ${signedTransaction}`,
+        // });
+        console.log(`Transaction was sent with ID: ${signedTransaction}`)
+        window.close();
       } else {
         throw new Error('Wallet is not connected');
       }
   } catch (err) {
-    createLog({
-      status: 'error',
-      method: 'signMessage',
-      message: `Error sending transaction: ${err}`,
-    });
+    // createLog({
+    //   status: 'error',
+    //   method: 'signMessage',
+    //   message: `Error sending transaction: ${err}`,
+    // });
     console.error("Error sending transaction:", err);
   }
 
@@ -244,10 +262,10 @@ const StatelessApp = () => {
         name: 'Disconnect',
         onClick: handleDisconnect,
       },
-      {
-        name: 'Test Purchase cNFT',
-        onClick: handleTestMint,
-      },
+      // {
+      //   name: 'Test Purchase cNFT',
+      //   onClick: handleTestMint,
+      // },
     ];
   }, [
     handleSignMessage,
