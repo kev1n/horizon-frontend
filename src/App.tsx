@@ -52,10 +52,6 @@ export type ConnectedMethods =
       name: string;
       onClick: () => Promise<void>;
     }
-  | {
-      name: string;
-      onClick: () => Promise<void>;
-    };
 
 
 
@@ -259,7 +255,7 @@ const StatelessApp = () => {
   }, [createLog, disconnect, publicKey, wallet]);
 
   const connectedMethods = useMemo(() => {
-    return [
+    const x = [
       {
         name: 'Sign In To Extension',
         onClick: handleSignIn,
@@ -268,11 +264,14 @@ const StatelessApp = () => {
         name: 'Disconnect',
         onClick: handleDisconnect,
       },
-      {
-         name: 'Purchase cNFT',
-         onClick: handleTestMint,
-      },
     ];
+    if (index && amount) {
+      x.push({
+        name: 'Purchase cNFT',
+        onClick: handleTestMint,
+      });
+    }
+    return x
   }, [
     handleSignMessage,
     handleSignIn,
